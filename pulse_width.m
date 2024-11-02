@@ -16,9 +16,7 @@ int_step = floor(pulse_step*fs);
 int_start = floor(start_of_everything*fs);
 pulse_duration*fs
 num_out_samples = 1000;
-matrix_of_result = zeros(num_out_samples,num_out_samples);
 
-for rep = 1:1000
 binary_sequence = randi([0, 1], 1, sequence_len);
 modulation_signal = binary_sequence*2-1;
 
@@ -37,9 +35,6 @@ for i = 1:length(binary_sequence)
 
 end
 
-matrix_of_result =matrix_of_result+ (output_signal(int_start:int_start+num_out_samples-1).')*output_signal(int_start:int_start+num_out_samples-1);
-end
-imagesc(matrix_of_result)
 
 % Plot the results
 figure;
