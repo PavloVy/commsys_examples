@@ -6,7 +6,7 @@ function transferred = baseband_channel_model(signal, SNR_db, multipath_switch)
     num_multipaths = 6;
     max_multipath_amplitude = 0.7;
     max_multipath_samples = 12;
-    for i=1:num_multipaths
+    for i=0:num_multipaths
       out_sig = out_sig+circshift(signal,randint(1,1,[1,max_multipath_samples]))*max_multipath_amplitude*exp(j*rand(1)*2*pi);
     endfor
   signal = out_sig;

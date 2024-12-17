@@ -34,7 +34,7 @@ for i =1:32
  [ U , S , V ] = svd(inversed_M);
  plot(real(channel_probing_signal(128:128+31)*M*(U*S*(V'))),'+')
  figure
- imagesc(real(S))
+ imagesc(real(U))
 
 
 

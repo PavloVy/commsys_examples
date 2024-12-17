@@ -33,3 +33,4 @@ function [encoded,G]= encoder(data,sz)
   encoded = reshape(out_vectors.',[1,prod(size(out_vectors))]);
 
 
+

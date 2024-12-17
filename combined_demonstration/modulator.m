@@ -1,7 +1,29 @@
-function [modulated,matched_filter,step] = modulator(complex_amplitudes,compression_ratio)
+function [modulated,matched_filter,step] = modulator(complex_amplitudes,compression_ratio,method)
+  #method = 'mlseq' #'ones' 'lfm'
+
   fs = 1e+6;
   pulse_duration = compression_ratio*1e-6;
-  pulse_shape = ones(1,floor(pulse_duration*fs));
+
+  if strcmp(method, 'ones')
+    pulse_shape = ones(1,floor(pulse_duration*fs));
+  elseif  strcmp(method, 'lfm')
+    pulse_samples = floor(pulse_duration*fs)
+    pulse_times = linspace(0,pulse_samples/fs,pulse_samples);
+    df = fs/10;
+    frequencies = linspace(-df,df,pulse_samples);
+    phase_accumulator = 0;
+    for i = 1:pulse_samples
+
+      pulse_times(i) = phase_accumulator;
+      phase_accumulator = phase_accumulator+2*pi*frequencies(i)/fs;
+    endfor
+    pulse_shape = exp(j*pulse_times);
+    plot(real(pulse_shape))
+    figure
+  else
+    pulse_shape = mseq(2,round(log2(compression_ratio))).';
+  endif
+
   pulse_step = pulse_duration;
   int_step = floor(pulse_step*fs);
   int_start = 0;
