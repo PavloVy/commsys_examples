@@ -1,30 +1,33 @@
+% This file models two independent I and Q signals, upconverts and downconverts them and then shows restoration of the originals
+% One may add some phase offset to see badly restored signals
 close all;
 fs = 1e6;       % Sampling frequency
 N = 10000;      % Number of samples
 t = (0:N-1)/fs; % Time vector
-fc = 50e3;      % Carrier frequency (10 kHz)
+fc = 50e3;      % Carrier frequency
 
+% Signals for "imaginary" and "real" part. Here we make them independent.
 s1 = sin(2*pi*1000*t);
 s2 = sign(sin(2*pi*2000*t));
 
 
-
+% Combined complex signal
 baseband_signal = s1 + 1j * s2;
 
-
+% LO signal to upconvert
 carrier = exp(1j * 2 * pi * fc * t);
 
 
 upconverted_signal = baseband_signal .* carrier;
 
-
+% signal which we physically transmit (only real part)
 qam_signal = real(upconverted_signal);
 
-
+% Some fft parameters
 nfft = 2^nextpow2(N);
 frequencies = (-nfft/2:nfft/2-1)*(fs/nfft);
 
-
+% Spectra for plots
 baseband_spectrum = fftshift(fft(baseband_signal, nfft));  % Baseband spectrum
 qam_spectrum = fftshift(fft(qam_signal, nfft));  % Spectrum of the QAM signal
 
@@ -69,6 +72,7 @@ qam_signal = qam_signal*exp(1j*pi/8);
 back_carrier = exp(-1j * 2 * pi * fc * t);
 figure;
 subplot(1, 2, 2);
+
 % down conversion
 downconverted_signal = qam_signal.*back_carrier;
 
